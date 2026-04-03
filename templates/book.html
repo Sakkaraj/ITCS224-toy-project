@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Booking | Hotel Reservation{% endblock %}
+
+{% block content %}
+  <section class="card booking-card">
+    <div>
+      <p class="section-label">Complete booking</p>
+      <h2>{{ room.label }}</h2>
+      <p class="lede">Confirm the room, enter guest details, and finalize the reservation.</p>
+    </div>
+
+    <div class="summary-box">
+      <div><span>Check-in</span><strong>{{ check_in_display }}</strong></div>
+      <div><span>Check-out</span><strong>{{ check_out_display }}</strong></div>
+      <div><span>Nights</span><strong>{{ nights }}</strong></div>
+      <div><span>Price per night</span><strong>{{ room.price | currency }}</strong></div>
+      <div><span>Total</span><strong>{{ total | currency }}</strong></div>
+    </div>
+
+    {% if errors %}
+      <section class="alert-card compact">
+        <h3>Please fix these issues</h3>
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    <form class="booking-form" method="post" action="{{ url_for('create_booking') }}">
+      <input type="hidden" name="check_in" value="{{ check_in }}">
+      <input type="hidden" name="check_out" value="{{ check_out }}">
+      <input type="hidden" name="room_type" value="{{ room_type }}">
+
+      <label>
+        <span>Guest name</span>
+        <input type="text" name="guest_name" value="{{ guest_name or '' }}" placeholder="Jamie Carter" required>
+      </label>
+      <label>
+        <span>Email address</span>
+        <input type="email" name="guest_email" value="{{ guest_email or '' }}" placeholder="jamie@example.com" required>
+      </label>
+
+      <div class="button-row">
+        <a class="button secondary" href="{{ url_for('index') }}">Back to search</a>
+        <button class="button primary" type="submit">Confirm booking</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

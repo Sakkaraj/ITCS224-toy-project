@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed | Hotel Reservation{% endblock %}
+
+{% block content %}
+  <section class="card confirmation-card">
+    <p class="section-label success">Booking confirmed</p>
+    <h2>Reference number {{ booking.reference }}</h2>
+    <p class="lede">Your reservation is saved locally and ready for check-in.</p>
+
+    <div class="reference-pill">{{ booking.reference }}</div>
+
+    <div class="summary-box stacked">
+      <div><span>Guest</span><strong>{{ booking.guest_name }}</strong></div>
+      <div><span>Email</span><strong>{{ booking.guest_email }}</strong></div>
+      <div><span>Room</span><strong>{{ booking.room_label }}</strong></div>
+      <div><span>Check-in</span><strong>{{ booking.check_in | friendly_date }}</strong></div>
+      <div><span>Check-out</span><strong>{{ booking.check_out | friendly_date }}</strong></div>
+      <div><span>Nights</span><strong>{{ booking.nights }}</strong></div>
+      <div><span>Total</span><strong>{{ booking.total_price | currency }}</strong></div>
+    </div>
+
+    <div class="button-row">
+      <a class="button secondary" href="{{ url_for('index') }}">Search another stay</a>
+      <a class="button primary" href="{{ url_for('cancel_form') }}">Cancel booking</a>
+    </div>
+  </section>
+{% endblock %}

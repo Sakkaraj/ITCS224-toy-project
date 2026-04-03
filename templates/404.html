@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Not Found | Hotel Reservation{% endblock %}
+
+{% block content %}
+  <section class="card booking-card">
+    <p class="section-label">Not found</p>
+    <h2>We could not find that page</h2>
+    <p class="lede">Return to the search page or cancel a reservation using a booking reference.</p>
+    <div class="button-row">
+      <a class="button primary" href="{{ url_for('index') }}">Go to search</a>
+      <a class="button secondary" href="{{ url_for('cancel_form') }}">Cancel booking</a>
+    </div>
+  </section>
+{% endblock %}

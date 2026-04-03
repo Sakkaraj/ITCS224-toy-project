@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Search Rooms | Hotel Reservation{% endblock %}
+
+{% block content %}
+  <section class="card hero-card">
+    <div>
+      <p class="section-label">Search</p>
+      <h2>Find available rooms for your stay</h2>
+      <p class="lede">Choose dates to see Standard, Deluxe, and Suite options with live availability.</p>
+    </div>
+
+    <form class="search-form" method="post" action="{{ url_for('search') }}">
+      <label>
+        <span>Check-in</span>
+        <input type="date" name="check_in" value="{{ search_form.check_in }}" min="{{ today }}" required>
+      </label>
+      <label>
+        <span>Check-out</span>
+        <input type="date" name="check_out" value="{{ search_form.check_out }}" min="{{ today }}" required>
+      </label>
+      <button type="submit" class="button primary">Search availability</button>
+    </form>
+  </section>
+
+  {% if errors %}
+    <section class="alert-card">
+      <h3>Please fix these issues</h3>
+      <ul>
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if search_results %}
+    <section class="results-header">
+      <div>
+        <p class="section-label">Available rooms</p>
+        <h2>{{ search_summary.nights }} night{% if search_summary.nights != 1 %}s{% endif %} from {{ search_summary.check_in }} to {{ search_summary.check_out }}</h2>
+      </div>
+    </section>
+
+    <section class="room-grid">
+      {% for room_type, room in search_results.items() %}
+        <article class="card room-card{% if room.available == 0 %} sold-out{% endif %}">
+          <div class="room-heading">
+            <div>
+              <p class="section-label">{{ room.label }}</p>
+              <h3>{{ room.price | currency }} per night</h3>
+            </div>
+            <span class="availability">{{ room.available }} left</span>
+          </div>
+
+          <p class="room-meta">Total for {{ room.nights }} night{% if room.nights != 1 %}s{% endif %}: {{ room.total | currency }}</p>
+
+          {% if room.available > 0 %}
+            <a class="button primary full-width" href="{{ url_for('book_form', room_type=room_type, check_in=search_form.check_in, check_out=search_form.check_out) }}">Reserve this room</a>
+          {% else %}
+            <button class="button secondary full-width" type="button" disabled>Sold out</button>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endblock %}

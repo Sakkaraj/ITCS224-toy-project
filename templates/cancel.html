@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Cancel Booking | Hotel Reservation{% endblock %}
+
+{% block content %}
+  <section class="card booking-card">
+    <div>
+      <p class="section-label">Cancel booking</p>
+      <h2>Enter your reference number</h2>
+      <p class="lede">Use the booking reference from your confirmation to remove the reservation.</p>
+    </div>
+
+    {% if errors %}
+      <section class="alert-card compact">
+        <h3>Please fix these issues</h3>
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    {% if result %}
+      <section class="alert-card compact {% if result.status == 'success' %}success{% endif %}">
+        <h3>{{ result.message }}</h3>
+        {% if result.booking %}
+          <p>{{ result.booking.room_label }} for {{ result.booking.guest_name }} has been removed from the schedule.</p>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    <form class="booking-form" method="post" action="{{ url_for('cancel_booking') }}">
+      <label>
+        <span>Booking reference</span>
+        <input type="text" name="reference" value="{{ reference }}" placeholder="ABC123" required>
+      </label>
+
+      <div class="button-row">
+        <a class="button secondary" href="{{ url_for('index') }}">Back to search</a>
+        <button class="button primary" type="submit">Cancel booking</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
